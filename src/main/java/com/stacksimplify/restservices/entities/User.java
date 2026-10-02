@@ -1,10 +1,15 @@
 package com.stacksimplify.restservices.entities;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="users")
@@ -12,8 +17,10 @@ public class User {
 	@Id
 	@GeneratedValue
 	private Long id;
+	@NotEmpty(message="User name field is required")
 	@Column(name="USER_NAME", length=50, nullable=false, unique=true)
 	private String username;
+	@Size(min=2, message="The name field should atleast have 2 character")
 	@Column(name="FIRST_NAME", length=50, nullable=false)
 	private String firstname;
 	@Column(name="LAST_NAME", length=50, nullable=false)
@@ -24,6 +31,7 @@ public class User {
 	private String role;
 	@Column(name="SSN", length=50, nullable=false)
 	private String ssn;
+	
 	public User() {
 		
 	}
@@ -79,10 +87,11 @@ public class User {
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
 	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", firstname=" + firstname + ", lastname=" + lastname
-				+ ", email=" + email + ", role=" + role + ", ssn=" + ssn + "]";
+				+ ", email=" + email + ", role=" + role + ", ssn=" + ssn + ", orders=" + orders + "]";
 	}
 	
 	

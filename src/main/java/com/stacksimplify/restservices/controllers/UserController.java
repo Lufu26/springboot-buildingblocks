@@ -19,8 +19,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.stacksimplify.restservices.entities.User;
 import com.stacksimplify.restservices.exceptions.UserExistException;
+import com.stacksimplify.restservices.exceptions.UserNameNotFoundException;
 import com.stacksimplify.restservices.exceptions.UserNotFoundException;
 import com.stacksimplify.restservices.services.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class UserController {
@@ -38,7 +41,7 @@ public class UserController {
 	//PostMapping annotation
 	
 	@PostMapping("/users")
-	public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder builder) {
+	public ResponseEntity<Void> createUser(@Valid @RequestBody User user, UriComponentsBuilder builder) {
 		try {
 			userService.createUser(user);
 			HttpHeaders headers = new HttpHeaders();
@@ -78,7 +81,10 @@ public class UserController {
 	
 	//getUserByUsername
 	@GetMapping("/users/byusername/{username}")
-	public User getUserByUsername(@PathVariable("username") String username) {
-		return userService.getUserByUsername(username);
+	public User getUserByUsername(@PathVariable("username") String username) throws UserNameNotFoundException {
+		User user = userService.getUserByUsername(username);
+		if(user == null) 
+			throw new UserNameNotFoundException("Username: " + username + " not found");
+		return user;
 	}
 }
